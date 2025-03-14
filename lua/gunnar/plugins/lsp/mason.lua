@@ -28,6 +28,7 @@ return {
         "ols",
         "lua_ls",
         "pyright",
+        "glslls",
       },
 
       automatic_installation = true,

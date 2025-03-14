@@ -107,7 +107,9 @@ return {
         },
       },
     })
-
+    
+    lspconfig["glslls"].setup({
+      capabilities = capabilities,     
+    })
   end,
 }
-
