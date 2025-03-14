@@ -80,7 +80,6 @@ return {
     
     lspconfig["lua_ls"].setup({
       capabilities = capabilities,
-      on_attach = on_attach,
       settings = {
         Lua = {
           diagnostics = {
@@ -101,7 +100,6 @@ return {
 
     lspconfig["ols"].setup({
       capabilities = capabilities,
-      on_attach = on_attach,
       init_options = {
         checker_args = "-strict-style",
         collections = {
