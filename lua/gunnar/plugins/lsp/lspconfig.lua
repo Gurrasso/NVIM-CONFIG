@@ -101,6 +101,14 @@ return {
     lspconfig["ols"].setup({
       capabilities = capabilities,
     })
+
+		lspconfig["ts_ls"].setup({
+      capabilities = capabilities,
+    })
+
+		lspconfig["pyright"].setup({
+      capabilities = capabilities,
+    })
     
   end,
 }

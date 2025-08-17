@@ -28,6 +28,7 @@ return {
         "ols",
         "lua_ls",
         "pyright",
+				"ts_ls",
       },
 
       automatic_installation = true,
