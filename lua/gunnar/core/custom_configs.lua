@@ -62,8 +62,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
 				if trusted_configs[file_to_check] then
 					run_file(file_to_check)
 				else
-					vim.ui.input({ prompt = "Run project Lua config at " .. file_to_check .. "? (y/n/t[rust]): " }, function(input)
-						-- y or no input will run it, anything else will not run it
+					vim.ui.input({ prompt = "Run project Lua config at " .. file_to_check_relative .. "? (y/n/t[rust]): " }, function(input)
+						-- y or no input will run it
+						-- t will add it to the trusted configs and run it
+						-- anything else will not run it
 						if input and (vim.fn.tolower(input) == "y" or input == "") then
 							run_file(file_to_check)
 						elseif input and vim.fn.tolower(input) == "t" then
@@ -71,7 +73,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 							save_trusted_configs(trusted_configs)
 							run_file(file_to_check)
 						end
-
 					end)
 				end
 			end
