@@ -15,10 +15,20 @@ end
 
 vim.api.nvim_create_user_command("AutoSave", function()
 	print "AutoSave starting..."
-	local pattern = vim.fn.input("Pattern: ")
-	local command = vim.split(vim.fn.input("Command: "), " ")
 
-	if not command or not pattern then return end
+	local pattern = vim.fn.input("Pattern: ")
+	-- If there is no pattern then return
+	if pattern == "" then 
+		vim.notify("Invalid Pattern")
+		return
+	end
+	local command = vim.split(vim.fn.input("Command: "), " ")
+	-- If there is no command then return
+	if command[0] == nil then 
+		vim.notify("Invalid command")
+		return
+	end
+
 
 	attach_to_buffer(pattern, command)
 end, {})
