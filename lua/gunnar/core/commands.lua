@@ -10,7 +10,6 @@
 local cmd_with_window_running = false
 -- This is so we close the window if we want to run a new command
 local win_global
-local buf = vim.api.nvim_create_buf(false, true)
 
 function run_command_with_window(command)
 	-- If we are already running a command then return
@@ -44,21 +43,27 @@ function run_command_with_window(command)
 		return max_width
 	end
 
+	local buf = vim.api.nvim_create_buf(false, true)
+
+	local win
+
 	-- Create floating window
-	local win = vim.api.nvim_open_win(buf, false, {
-		relative = "editor",
-		row = 0,
-		col = 0,
-		width= 1,
-		height = 1,
-		style = "minimal",
-		border = "rounded",
-	})
+	local init_window = function ()
+		win = vim.api.nvim_open_win(buf, false, {
+			relative = "editor",
+			row = 0,
+			col = 0,
+			width= 1,
+			height = 1,
+			style = "minimal",
+			border = "rounded",
+		})
 
-	-- Make the window a little transparent
-	vim.api.nvim_win_set_option(win, "winblend", 10)
+		-- Make the window a little transparent
+		vim.api.nvim_win_set_option(win, "winblend", 10)
 
-	win_global = win
+		win_global = win
+	end
 
 	-- Close function
 	local function close_float()
@@ -84,6 +89,11 @@ function run_command_with_window(command)
 		local col = math.floor((vim.o.columns - width) / 2)
 
 		height = math.max(height, 1)
+
+		-- If the window isnt inited then init it
+		if not win then
+			init_window()
+		end
 
 		-- Set the options
 		vim.api.nvim_win_set_config(win, {

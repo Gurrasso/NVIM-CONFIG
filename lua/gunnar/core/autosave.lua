@@ -23,12 +23,6 @@ vim.api.nvim_create_user_command("AutoSave", function()
 		return
 	end
 	local command = vim.split(vim.fn.input("Command: "), " ")
-	-- If there is no command then return
-	if command[0] == nil then 
-		vim.notify("Invalid command")
-		return
-	end
-
 
 	attach_to_buffer(pattern, command)
 end, {desc = "Runs a command when a file following a pattern is saved"})
