@@ -1,9 +1,17 @@
 
 --
--- This function will run a command and update a window with the commands output
+-- This function will run a command and update a window with the commands output, it will only run 1 command at a time
 -- This function is a little messy and bad, buuuut... it works TODO: fix???
 --
+
+-- This is so that we only run 1 command at a time
+local cmd_with_window_running = false
+
 function run_command_with_window(command)
+	-- If we are already running a command then return
+	if cmd_with_window_running == true then return end
+	cmd_with_window_running = true
+
 	-- The data that we get from stdout and sdterr
 	local output_lines = {}
 
@@ -12,7 +20,6 @@ function run_command_with_window(command)
 	-- The time for the box to dissapear on error
 	local err_exit_time = 20000
 
-	-- Create a buffer
 	local buf = vim.api.nvim_create_buf(false, true)
 
 	local get_max_width = function()
@@ -46,6 +53,7 @@ function run_command_with_window(command)
 	local function close_float()
   	if vim.api.nvim_win_is_valid(win) then
     	vim.api.nvim_win_close(win, true)
+			cmd_with_window_running = false
   	end
 	end
 
@@ -115,9 +123,7 @@ function run_command_with_window(command)
 		on_exit = function(_,_,_)
 			-- Make it so the window closes after a certain amount of time
 			vim.defer_fn(function()
-				if vim.api.nvim_win_is_valid(win) then
-					vim.api.nvim_win_close(win, true)
-				end
+				close_float()
 			end, exit_time)
 		end
 	})
