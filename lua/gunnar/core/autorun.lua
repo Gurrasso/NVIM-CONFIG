@@ -18,4 +18,4 @@ vim.api.nvim_create_user_command("AutoRun", function()
 	end
 
 	vim.keymap.set("n", "<leader>r", run_function)
-end, {})
+end, {desc = "Maps <leader>r to a command"})

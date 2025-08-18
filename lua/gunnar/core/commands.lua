@@ -101,8 +101,6 @@ function run_command_with_window(command)
 		vim.api.nvim_win_set_cursor(win, { line_count, 0 })
 	end
 
-	update_window()
-
 	vim.fn.jobstart(command, {
 		stdout_buffered = false,
 		on_stderr = function(_, data)

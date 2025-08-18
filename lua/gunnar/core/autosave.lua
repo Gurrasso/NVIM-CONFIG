@@ -31,4 +31,4 @@ vim.api.nvim_create_user_command("AutoSave", function()
 
 
 	attach_to_buffer(pattern, command)
-end, {})
+end, {desc = "Runs a command when a file following a pattern is saved"})
