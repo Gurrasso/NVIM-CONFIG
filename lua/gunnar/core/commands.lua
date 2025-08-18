@@ -1,16 +1,27 @@
 
 --
 -- This function will run a command and update a window with the commands output, it will only run 1 command at a time
+-- You can close the window by pressing esc, it will only display 1 window at a time so if you open a new window the old one will be closed
+--
 -- This function is a little messy and bad, buuuut... it works TODO: fix???
 --
 
 -- This is so that we only run 1 command at a time
 local cmd_with_window_running = false
+-- This is so we close the window if we want to run a new command
+local win_global
+local buf = vim.api.nvim_create_buf(false, true)
 
 function run_command_with_window(command)
 	-- If we are already running a command then return
-	if cmd_with_window_running == true then return end
+	if cmd_with_window_running then return end
 	cmd_with_window_running = true
+
+	if win_global ~= nil then
+		if vim.api.nvim_win_is_valid(win_global) then
+			vim.api.nvim_win_close(win_global, true)
+		end
+	end
 
 	-- The data that we get from stdout and sdterr
 	local output_lines = {}
@@ -19,8 +30,6 @@ function run_command_with_window(command)
 	local exit_time = 700
 	-- The time for the box to dissapear on error
 	local err_exit_time = 20000
-
-	local buf = vim.api.nvim_create_buf(false, true)
 
 	local get_max_width = function()
 		-- Calculate dynamic dimensions
@@ -49,11 +58,12 @@ function run_command_with_window(command)
 	-- Make the window a little transparent
 	vim.api.nvim_win_set_option(win, "winblend", 10)
 
+	win_global = win
+
 	-- Close function
 	local function close_float()
   	if vim.api.nvim_win_is_valid(win) then
     	vim.api.nvim_win_close(win, true)
-			cmd_with_window_running = false
   	end
 	end
 
@@ -73,7 +83,7 @@ function run_command_with_window(command)
 		local row = 1
 		local col = math.floor((vim.o.columns - width) / 2)
 
-		height = math.max(height, 4)
+		height = math.max(height, 1)
 
 		-- Set the options
 		vim.api.nvim_win_set_config(win, {
@@ -121,8 +131,8 @@ function run_command_with_window(command)
   		end
 		end,
 		on_exit = function(_,_,_)
-			-- If we have a low exit time we want to be able to run a new command immediately
-			if exit_time < err_exit_time then cmd_with_window_running = false end
+			-- The command is no longer running
+			cmd_with_window_running = false
 
 			-- Make it so the window closes after a certain amount of time
 			vim.defer_fn(function()
