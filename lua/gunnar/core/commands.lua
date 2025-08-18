@@ -121,6 +121,9 @@ function run_command_with_window(command)
   		end
 		end,
 		on_exit = function(_,_,_)
+			-- If we have a low exit time we want to be able to run a new command immediately
+			if exit_time < err_exit_time then cmd_with_window_running = false end
+
 			-- Make it so the window closes after a certain amount of time
 			vim.defer_fn(function()
 				close_float()
