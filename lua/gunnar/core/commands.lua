@@ -29,7 +29,7 @@ function run_command_with_window(command)
 	-- The time for the box to dissapear
 	local exit_time = 700
 	-- The time for the box to dissapear on error
-	local err_exit_time = 20000
+	local err_exit_time = 40000
 
 	local get_max_width = function()
 		-- Calculate dynamic dimensions
