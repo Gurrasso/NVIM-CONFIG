@@ -90,6 +90,7 @@ vim.api.nvim_create_user_command("CheckConfigs", function()
 	check_configs()
 end,{desc = "Check for configs"})
 
+-- So we only have 1 window open at a time
 local list_trusted_win
 
 --
@@ -115,6 +116,8 @@ vim.api.nvim_create_user_command("ListTrustedConfigs", function()
     return
   end
 
+
+	-- So we only have 1 window open at a time
 	if list_trusted_win ~= nil then
 		if vim.api.nvim_win_is_valid(list_trusted_win) then
 			vim.api.nvim_win_close(list_trusted_win, true)
