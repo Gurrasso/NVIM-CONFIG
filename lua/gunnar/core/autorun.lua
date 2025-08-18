@@ -6,10 +6,10 @@ vim.g.mapleader = " "
 
 vim.api.nvim_create_user_command("AutoRun", function()
 	print "AutoRun starting..."
-	local command = vim.fn.input("Command: ")
+	local command = vim.split(vim.fn.input("Command: "), " ")
 
 	run_function = function()
-		os.execute(command)
+		run_command_with_window(command)
 	end
 
 	vim.keymap.set("n", "<leader>r", run_function)
