@@ -2,13 +2,13 @@
 -- A package that allows me to use a keybind to run a certain cmd that i can set
 --
 
-vim.g.mapleader = " "
-
 vim.api.nvim_create_user_command("AutoRun", function()
 	print "AutoRun starting..."
 	local command = vim.split(vim.fn.input("Command: "), " ")
 
-	run_function = function()
+	if not command then return end
+
+	local run_function = function()
 		run_command_with_window(command)
 	end
 
