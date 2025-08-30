@@ -73,7 +73,7 @@ function run_command_with_window(command)
 	end
 
 	-- Map <Esc> to close it
-	vim.keymap.set('n', '<Esc>', close_float, { noremap = true, silent = true, buffer = 0 })
+	vim.keymap.set('n', '<Esc>', close_float, { noremap = true, silent = true})
 
 	-- Update the windows config and the buffers content
 	local update_window = function()
