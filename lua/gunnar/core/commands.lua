@@ -29,6 +29,8 @@ function run_command_with_window(command)
 	local exit_time = 700
 	-- The time for the box to dissapear on error
 	local err_exit_time = 40000
+	-- The time for the box to dissapear if there is no content in the window
+	local no_content_exit_time = 100
 
 	local get_max_width = function()
 		-- Calculate dynamic dimensions
@@ -128,7 +130,7 @@ function run_command_with_window(command)
 		end,
 		on_stdout = function(_, data)
 			if data and #data > 0 then
-				-- Check the lines, remove training new_lines
+				-- Check the lines, remove trailing new_lines
 				for _, line in ipairs(data) do
 					local clean = line:gsub("[\r\n]+$", "")
 					if clean ~= "" then
@@ -141,6 +143,11 @@ function run_command_with_window(command)
 		on_exit = function(_,_,_)
 			-- The command is no longer running
 			cmd_with_window_running = false
+
+			-- Low exit time if there is no content
+			if #output_lines <= 1  then
+				exit_time = no_content_exit_time
+			end
 
 			-- Make it so the window closes after a certain amount of time
 			vim.defer_fn(function()
